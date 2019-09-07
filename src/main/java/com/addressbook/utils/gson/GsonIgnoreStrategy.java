@@ -1,7 +1,3 @@
-/*
- * ©  Implicitly86 All Rights Reserved
- */
-
 package com.addressbook.utils.gson;
 
 import com.google.gson.ExclusionStrategy;

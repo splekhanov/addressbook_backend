@@ -7,13 +7,12 @@ import com.addressbook.exceptions.NotFoundException;
 import com.addressbook.repository.contact.ContactRepository;
 import com.addressbook.repository.security.UserRepository;
 import com.addressbook.service.ContactService;
+import com.addressbook.utils.UserUtils;
 import com.addressbook.utils.mapper.contact.ContactMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
+import java.util.Optional;
 
 @Service
 public class ContactServiceImpl implements ContactService {
@@ -31,15 +30,22 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ContactDTO getContact(Long id) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = userRepository.findByName(authentication.getName());
+        User currentUser = currentUser();
         Contact contact = contactRepository.findById(id).orElse(null);
-        System.out.println("!!! CONTACT CUSTOMER: " + contact);
-        System.out.println("!!! CURRENT USER CUSTOMER: " + currentUser.getCustomer());
         if (contact == null || !contact.getCustomer().equals(currentUser.getCustomer())) {
             throw new NotFoundException();
         }
         return contactMapper.toDto(contact);
+    }
+
+    private User currentUser() {
+        Optional<Long> userId = UserUtils.getCurrentUserId();
+        if (!userId.isPresent()) {
+            throw new RuntimeException("User not authenticated");
+        }
+        if (!userRepository.existsById(userId.orElse(null))) {
+            throw new RuntimeException("User not found");
+        }
+        return userRepository.findById(userId.orElse(null)).orElse(null);
     }
 }

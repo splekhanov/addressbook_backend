@@ -1,7 +1,3 @@
-/*
- * ©  Implicitly86 All Rights Reserved
- */
-
 package com.addressbook.utils.mapper.customer;
 
 import com.addressbook.dto.customer.CustomerDTO;

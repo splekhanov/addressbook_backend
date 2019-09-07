@@ -1,7 +1,3 @@
-/*
- * ©  Implicitly86 All Rights Reserved
- */
-
 package com.addressbook.utils.filter;
 
 import lombok.extern.slf4j.Slf4j;

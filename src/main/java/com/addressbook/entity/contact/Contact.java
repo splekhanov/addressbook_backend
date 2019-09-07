@@ -2,7 +2,6 @@ package com.addressbook.entity.contact;
 
 import com.addressbook.entity.IdentifiedEntity;
 import com.addressbook.entity.customer.Customer;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,7 +40,6 @@ public class Contact implements IdentifiedEntity {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH},
             optional = false)
-//    @JsonBackReference
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
