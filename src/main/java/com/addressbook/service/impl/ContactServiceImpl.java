@@ -22,7 +22,7 @@ public class ContactServiceImpl implements ContactService {
     private final ContactMapper contactMapper;
 
     @Autowired
-    public ContactServiceImpl(ContactRepository contactRepository, UserRepository userRepository, ContactMapper contactMapper){
+    public ContactServiceImpl(ContactRepository contactRepository, UserRepository userRepository, ContactMapper contactMapper) {
         this.contactRepository = contactRepository;
         this.userRepository = userRepository;
         this.contactMapper = contactMapper;

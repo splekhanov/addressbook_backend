@@ -4,6 +4,8 @@ import com.addressbook.dto.contact.ContactDTO;
 import com.addressbook.service.ContactService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
+import io.swagger.annotations.AuthorizationScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ public class ContactController {
         this.contactService = contactService;
     }
 
-    @ApiOperation(value = "Get contact by ID")
+    @ApiOperation(value = "Get contact by ID", authorizations = @Authorization(value="Authorization"))
     @GetMapping(value = "/contacts/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ContactDTO> getAccount(@PathVariable("id") Long id) {
         return ok(contactService.getContact(id));

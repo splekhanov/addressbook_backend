@@ -1,69 +1,82 @@
 package com.addressbook.configuration;
 
+import com.addressbook.security.JwtAuthenticationEntryPoint;
+import com.addressbook.security.JwtAuthenticationFilter;
 import com.addressbook.service.impl.CustomUserDetailsService;
+import com.addressbook.utils.filter.CustomCorsFilter;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import javax.sql.DataSource;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private BasicAuthEntryPoint authenticationEntryPoint;
-    private CustomUserDetailsService userDetailsService;
-    private DataSource securityDataSource;
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtAuthenticationEntryPoint unauthorizedHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
-    public SecurityConfiguration(BasicAuthEntryPoint authenticationEntryPoint, CustomUserDetailsService userDetailsService,
-                                 DataSource securityDataSource) {
-        this.authenticationEntryPoint = authenticationEntryPoint;
+    public SecurityConfiguration(CustomUserDetailsService userDetailsService,
+                                 JwtAuthenticationEntryPoint unauthorizedHandler,
+                                 JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsService = userDetailsService;
-        this.securityDataSource = securityDataSource;
+        this.unauthorizedHandler = unauthorizedHandler;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers(
-                        "/login",
-                        "/**/api-docs",
-                        "/swagger**",
-                        "/swagger-resources/**",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js").permitAll()
-                .anyRequest().authenticated()
+                .cors()
                 .and()
-                .httpBasic()
-                .authenticationEntryPoint(authenticationEntryPoint);
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .jdbcAuthentication().dataSource(securityDataSource)
-                .usersByUsernameQuery("SELECT name, password, 'true' as enabled FROM user where name = ?")
-                .authoritiesByUsernameQuery("SELECT user.name as username, role.name as role\n" +
-                        "FROM user\n" +
-                        "       INNER JOIN user_role ON user.id = user_role.id\n" +
-                        "       INNER JOIN role ON user_role.id = role.id\n" +
-                        "WHERE user.name = ?");
+                .csrf()
+                    .disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler)
+                    .and()
+                .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                .authorizeRequests()
+                    .antMatchers(HttpMethod.OPTIONS, "/**")
+                        .permitAll()
+                    .antMatchers(
+                            "/login",
+                            "/**/api-docs",
+                            "/swagger**",
+                            "/**/docs",
+                            "/**/webjars/**",
+                            "/swagger-resources/**",
+                            "/**/*.png",
+                            "/**/*.gif",
+                            "/**/*.svg",
+                            "/**/*.jpg",
+                            "/**/*.html",
+                            "/**/*.css",
+                            "/**/*.js").permitAll()
+                    .anyRequest().authenticated();
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomCorsFilter(), JwtAuthenticationFilter.class);
     }
 
     @Bean
@@ -76,13 +89,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
-    }
-
 }
