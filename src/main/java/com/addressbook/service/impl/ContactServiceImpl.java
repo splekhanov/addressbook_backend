@@ -18,8 +18,8 @@ import java.util.Optional;
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
-    private final UserRepository userRepository;
-    private final ContactMapper contactMapper;
+        private final UserRepository userRepository;
+        private final ContactMapper contactMapper;
 
     @Autowired
     public ContactServiceImpl(ContactRepository contactRepository, UserRepository userRepository, ContactMapper contactMapper) {
