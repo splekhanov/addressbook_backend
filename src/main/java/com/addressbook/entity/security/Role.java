@@ -2,6 +2,8 @@ package com.addressbook.entity.security;
 
 import com.addressbook.entity.IdentifiedEntity;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -24,6 +26,15 @@ public class Role implements IdentifiedEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"))
+    transient private List<User> users;
 
     public Role(String name){
         this.name = name;

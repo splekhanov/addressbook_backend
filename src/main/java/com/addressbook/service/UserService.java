@@ -13,4 +13,6 @@ public interface UserService {
 //    void deleteContact(int id);
 
 //    Page<UserDTO> getAllUsers(Pageable pageable);
+
+    void deleteUserByUserName(String name);
 }

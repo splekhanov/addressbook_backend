@@ -36,7 +36,6 @@ public class User implements IdentifiedEntity {
     private List<Contact> contacts;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @Fetch(FetchMode.SUBSELECT)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(

@@ -57,4 +57,13 @@ public class UserServiceImpl implements UserService {
         User result = userRepository.saveAndFlush(entity);
         return userMapper.toDto(result);
     }
+
+    @Override
+    public void deleteUserByUserName(String userName) {
+        User byUsername = userRepository.findByName(userName).orElseThrow(() -> new RuntimeException(String.format("User with name '%s' not found!", userName)));
+//        if (byUsername.getRoles().stream().anyMatch(role -> "admin".equals(role.getName()))){
+//            throw new RuntimeException("You can not delete admin!");
+//        }
+        userRepository.deleteById(byUsername.getId());
+    }
 }
