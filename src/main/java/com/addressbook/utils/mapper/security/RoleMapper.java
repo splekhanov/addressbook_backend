@@ -1,30 +1,32 @@
-package com.addressbook.utils.mapper.customer;
+package com.addressbook.utils.mapper.security;
 
-import com.addressbook.dto.customer.CustomerDTO;
-import com.addressbook.entity.customer.Customer;
+import com.addressbook.dto.contact.ContactDTO;
+import com.addressbook.dto.security.RoleDTO;
+import com.addressbook.entity.contact.Contact;
+import com.addressbook.entity.security.Role;
 import com.addressbook.utils.mapper.EntityMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomerMapper implements EntityMapper<Customer, CustomerDTO> {
+public class RoleMapper implements EntityMapper<Role, RoleDTO> {
 
     @Override
-    public CustomerDTO toDto(Customer source) {
+    public RoleDTO toDto(Role source) {
         if (source == null) {
             return null;
         }
-        CustomerDTO target = CustomerDTO.builder().build();
+        RoleDTO target = new RoleDTO();
         BeanUtils.copyProperties(source, target);
         return target;
     }
 
     @Override
-    public Customer toEntity(CustomerDTO source) {
+    public Role toEntity(RoleDTO source) {
         if (source == null) {
             return null;
         }
-        Customer target = Customer.builder().build();
+        Role target = new Role();
         BeanUtils.copyProperties(source, target);
         return target;
     }

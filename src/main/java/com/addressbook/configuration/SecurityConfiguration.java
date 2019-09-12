@@ -65,6 +65,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                             "/**/api-docs",
                             "/swagger**",
                             "/**/docs",
+                            "/h2-console",
+                            "/h2-console/**",
                             "/**/webjars/**",
                             "/swagger-resources/**",
                             "/**/*.png",
@@ -77,6 +79,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .anyRequest().authenticated();
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(new CustomCorsFilter(), JwtAuthenticationFilter.class);
+        http.headers().frameOptions().disable();
     }
 
     @Bean

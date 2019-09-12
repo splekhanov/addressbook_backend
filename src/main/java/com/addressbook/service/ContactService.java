@@ -1,16 +1,16 @@
 package com.addressbook.service;
 
 import com.addressbook.dto.contact.ContactDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ContactService {
 
-//    void addContact(ContactDTO contact);
+    ContactDTO addContact(ContactDTO contact);
 
     ContactDTO getContact(Long id);
 
 //    void deleteContact(int id);
 //
-//    List<ContactDTO> getAllContacts();
+    Page<ContactDTO> getAllContacts(Pageable pageable);
 }

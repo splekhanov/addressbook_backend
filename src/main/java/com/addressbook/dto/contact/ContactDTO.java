@@ -1,6 +1,7 @@
 package com.addressbook.dto.contact;
 
 import com.addressbook.dto.IdentifiedDTO;
+import com.addressbook.dto.security.UserDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

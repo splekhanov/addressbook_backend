@@ -10,6 +10,8 @@ import com.addressbook.service.ContactService;
 import com.addressbook.utils.UserUtils;
 import com.addressbook.utils.mapper.contact.ContactMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,8 +20,8 @@ import java.util.Optional;
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
-        private final UserRepository userRepository;
-        private final ContactMapper contactMapper;
+    private final UserRepository userRepository;
+    private final ContactMapper contactMapper;
 
     @Autowired
     public ContactServiceImpl(ContactRepository contactRepository, UserRepository userRepository, ContactMapper contactMapper) {
@@ -32,10 +34,25 @@ public class ContactServiceImpl implements ContactService {
     public ContactDTO getContact(Long id) {
         User currentUser = currentUser();
         Contact contact = contactRepository.findById(id).orElse(null);
-        if (contact == null || !contact.getCustomer().equals(currentUser.getCustomer())) {
+        if (contact == null || !contact.getUser().equals(currentUser)) {
             throw new NotFoundException();
         }
         return contactMapper.toDto(contact);
+    }
+
+    @Override
+    public ContactDTO addContact(ContactDTO contact) {
+        User currentUser = currentUser();
+        Contact entity = contactMapper.toEntity(contact);
+        entity.setUser(currentUser);
+        Contact result = contactRepository.saveAndFlush(entity);
+        return contactMapper.toDto(result);
+    }
+
+    @Override
+    public Page<ContactDTO> getAllContacts(Pageable pageable) {
+        User currentUser = currentUser();
+        return contactRepository.findAllByUser(currentUser, pageable).map(contactMapper::toDto);
     }
 
     private User currentUser() {

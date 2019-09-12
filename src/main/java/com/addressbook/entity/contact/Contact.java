@@ -1,7 +1,7 @@
 package com.addressbook.entity.contact;
 
 import com.addressbook.entity.IdentifiedEntity;
-import com.addressbook.entity.customer.Customer;
+import com.addressbook.entity.security.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,7 +40,7 @@ public class Contact implements IdentifiedEntity {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH},
             optional = false)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
 }

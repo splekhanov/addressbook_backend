@@ -1,12 +1,13 @@
 package com.addressbook.entity.security;
 
 import com.addressbook.entity.IdentifiedEntity;
-import com.addressbook.entity.customer.Customer;
+import com.addressbook.entity.contact.Contact;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -31,23 +32,16 @@ public class User implements IdentifiedEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    @OneToMany(mappedBy = "user")
+    private List<Contact> contacts;
 
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(
-                    name = "user_id",
-                    referencedColumnName = "id"
-            ),
+                    name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
-                    name = "role_id",
-                    referencedColumnName = "id"
-            )
-    )
+                    name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 }

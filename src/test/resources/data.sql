@@ -1,0 +1,2 @@
+INSERT INTO customer (id, first_name, last_name, email) VALUES (1, 'sergey', 'plehanov', 'someemail@mail.ru')
+INSERT INTO user (id, name, password, customer_id) VALUES (1, 'flash', '$2a$10$BEebJV2WCUPndkLvYiDbB.1MmvsdIvcdQIhD60mj/IXmy9QaUcBWy', 1)

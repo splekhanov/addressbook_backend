@@ -5,13 +5,15 @@ import com.addressbook.service.ContactService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
-import io.swagger.annotations.AuthorizationScope;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -28,7 +30,25 @@ public class ContactController {
 
     @ApiOperation(value = "Get contact by ID", authorizations = @Authorization(value="Authorization"))
     @GetMapping(value = "/contacts/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ContactDTO> getAccount(@PathVariable("id") Long id) {
+    public ResponseEntity<ContactDTO> getContact(@PathVariable("id") Long id) {
         return ok(contactService.getContact(id));
+    }
+
+    @ApiOperation(value = "Add new contact", authorizations = @Authorization(value="Authorization"))
+    @PostMapping(value = "/contacts", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<ContactDTO> addContact(@RequestBody ContactDTO contact) {
+        ContactDTO contactDTO = contactService.addContact(contact);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(contactDTO.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(contactDTO);
+    }
+
+    @ApiOperation(value = "Get all user contacts", authorizations = @Authorization(value="Authorization"))
+    @GetMapping(value = "/contacts", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Page<ContactDTO>> getAllContacts(Pageable pageable) {
+        return ok(contactService.getAllContacts(pageable));
     }
 }

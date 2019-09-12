@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -21,11 +23,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByName(username);
-        if (user == null) {
+        Optional<User> user = userRepository.findByName(username);
+        if (!user.isPresent()) {
             throw new UsernameNotFoundException("UserDTO not found with username or email : " + username);
         }
-        return UserPrincipal.create(user);
+        return UserPrincipal.create(user.orElse(null));
     }
 
     @Transactional
