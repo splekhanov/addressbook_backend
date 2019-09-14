@@ -3,11 +3,8 @@ package com.addressbook.entity.security;
 import com.addressbook.entity.IdentifiedEntity;
 import com.addressbook.entity.contact.Contact;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -31,6 +28,9 @@ public class User implements IdentifiedEntity {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled;
 
     @OneToMany(mappedBy = "user")
     private List<Contact> contacts;

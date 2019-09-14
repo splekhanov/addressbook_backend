@@ -8,9 +8,7 @@ public interface ContactService {
 
     ContactDTO addContact(ContactDTO contact);
 
-    ContactDTO getContact(Long id);
-
 //    void deleteContact(int id);
-//
+
     Page<ContactDTO> getAllContacts(Pageable pageable);
 }

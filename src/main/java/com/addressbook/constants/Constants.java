@@ -2,8 +2,6 @@ package com.addressbook.constants;
 
 public class Constants {
 
-    public static final String MESSAGE = "message";
-    public static final String BODY = "body";
     public static final String ENTITY_BASE_PACKAGE = "com.addressbook.entity";
     public static final String REPOSITORY_BASE_PACKAGE = "com.addressbook.repository";
 
@@ -12,5 +10,4 @@ public class Constants {
 
     private Constants() {
     }
-
 }

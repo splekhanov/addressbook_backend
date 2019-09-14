@@ -4,7 +4,6 @@ import com.addressbook.security.JwtAuthenticationEntryPoint;
 import com.addressbook.security.JwtAuthenticationFilter;
 import com.addressbook.service.impl.CustomUserDetailsService;
 import com.addressbook.utils.filter.CustomCorsFilter;
-import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

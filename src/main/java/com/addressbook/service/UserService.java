@@ -8,10 +8,6 @@ public interface UserService {
 
     UserDTO createUser(UserDTO user);
 
-//    UserDTO getUser(Long id);
-
-//    void deleteContact(int id);
-
 //    Page<UserDTO> getAllUsers(Pageable pageable);
 
     void deleteUserByUserName(String name);
