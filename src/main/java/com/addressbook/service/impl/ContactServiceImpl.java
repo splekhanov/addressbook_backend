@@ -30,15 +30,15 @@ public class ContactServiceImpl implements ContactService {
         this.contactMapper = contactMapper;
     }
 
-//    @Override
-//    public ContactDTO getContact(Long id) {
-//        User currentUser = currentUser();
-//        Contact contact = contactRepository.findById(id).orElse(null);
-//        if (contact == null || !contact.getUser().equals(currentUser)) {
-//            throw new NotFoundException("No contact with id " + id + " was found");
-//        }
-//        return contactMapper.toDto(contact);
-//    }
+    @Override
+    public ContactDTO getContact(Long id) {
+        User currentUser = currentUser();
+        Contact contact = contactRepository.findById(id).orElse(null);
+        if (contact == null || !contact.getUser().equals(currentUser)) {
+            throw new NotFoundException("No contact with id " + id + " was found");
+        }
+        return contactMapper.toDto(contact);
+    }
 
     @Override
     public ContactDTO addContact(ContactDTO contact) {
