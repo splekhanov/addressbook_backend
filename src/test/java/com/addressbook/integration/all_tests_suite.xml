@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE suite SYSTEM 'http://testng.org/testng-1.0.dtd'>
+<suite name='REST API: Contact service'>
+
+    <parameter name='startPageUrl' value='https://stage.dmvdesk.com/core-proxy-api/'/>
+    <parameter name='basePath' value='/api/v1/fee-calc/new-vehicle'/>
+    <parameter name='credentials' value='/proxy_api_fees_calc.properties'/>
+    <parameter name='story' value='New Vehicle'/>
+
+    <test name='Contact service'>
+        <classes>
+            <class name='com.addressbook.integration.tests.contact.ContactServiceIntegrationTest'/>
+        </classes>
+    </test>
+</suite>
