@@ -14,5 +14,5 @@ RESTful CRUD application example created with Spring Boot and Hibernate integrat
 | GET       | /api/v1/login                   | Login with credentials        |                                                     
 | POST      | /api/v1/contacts                | Add new contact to addressbook| 
 | GET       | /api/v1/contacts/{id}           | Get contact by ID             | 
-| PUT       | /api/employees                  | Update an existing employee   |
-| DELETE    | /api/employees/{employeeId}     | Delete an existing employee   |
+| PUT       | /api/v1/contacts                | Update existing contact       |
+| DELETE    | /api/contacts/{id}              | Delete contact by ID          |
