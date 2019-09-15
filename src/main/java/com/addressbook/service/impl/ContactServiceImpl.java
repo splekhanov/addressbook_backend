@@ -3,6 +3,8 @@ package com.addressbook.service.impl;
 import com.addressbook.dto.contact.ContactDTO;
 import com.addressbook.entity.contact.Contact;
 import com.addressbook.entity.security.User;
+import com.addressbook.exceptions.ContactAlreadyExist;
+import com.addressbook.exceptions.ContactNotFound;
 import com.addressbook.exceptions.NotFoundException;
 import com.addressbook.repository.contact.ContactRepository;
 import com.addressbook.repository.security.UserRepository;
@@ -41,18 +43,39 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public ContactDTO addContact(ContactDTO contact) {
-        User currentUser = currentUser();
-        Contact entity = contactMapper.toEntity(contact);
-        entity.setUser(currentUser);
-        Contact result = contactRepository.saveAndFlush(entity);
-        return contactMapper.toDto(result);
+    public ContactDTO addContact(ContactDTO contactDTO) {
+        contactRepository.findContactByFirstName(contactDTO.getFirstName()).ifPresent(e -> {
+            throw new ContactAlreadyExist("Contact with name '" + e.getFirstName() + "' is already exists");
+        });
+        return saveContactInRepository(contactDTO);
+    }
+
+    @Override
+    public void deleteContact(Long id) {
+        contactRepository.findById(id)
+                .orElseThrow(() -> new ContactNotFound("Contact with id '" + id + "' not found"));
+        contactRepository.deleteById(id);
     }
 
     @Override
     public Page<ContactDTO> getAllContacts(Pageable pageable) {
         User currentUser = currentUser();
         return contactRepository.findAllByUser(currentUser, pageable).map(contactMapper::toDto);
+    }
+
+    @Override
+    public ContactDTO editContact(ContactDTO contactDTO) {
+        contactRepository.findById(contactDTO.getId())
+                .orElseThrow(() -> new ContactNotFound("Contact with id '" + contactDTO.getId() + "' not found"));
+        return saveContactInRepository(contactDTO);
+    }
+
+    private ContactDTO saveContactInRepository(ContactDTO contactDTO) {
+        User currentUser = currentUser();
+        Contact entity = contactMapper.toEntity(contactDTO);
+        entity.setUser(currentUser);
+        Contact result = contactRepository.saveAndFlush(entity);
+        return contactMapper.toDto(result);
     }
 
     private User currentUser() {

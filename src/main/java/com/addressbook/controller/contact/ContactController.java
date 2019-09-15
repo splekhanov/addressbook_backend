@@ -46,9 +46,28 @@ public class ContactController {
         return ResponseEntity.created(location).body(contactDTO);
     }
 
+    @ApiOperation(value = "Edit existing contact", authorizations = @Authorization(value="Authorization"))
+    @PutMapping(value = "/contacts", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<ContactDTO> editContact(@RequestBody ContactDTO contact) {
+        ContactDTO contactDTO = contactService.editContact(contact);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(contactDTO.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(contactDTO);
+    }
+
     @ApiOperation(value = "Get all user contacts", authorizations = @Authorization(value="Authorization"))
     @GetMapping(value = "/contacts", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Page<ContactDTO>> getAllContacts(Pageable pageable) {
         return ok(contactService.getAllContacts(pageable));
+    }
+
+    @ApiOperation(value = "Delete contact", authorizations = @Authorization(value="Authorization"))
+    @DeleteMapping(value = "/contacts/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Void> deleteContact(@PathVariable("id") Long id) {
+        contactService.deleteContact(id);
+        return ResponseEntity.ok().build();
     }
 }
