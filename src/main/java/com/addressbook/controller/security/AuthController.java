@@ -6,6 +6,9 @@ import com.addressbook.dto.security.TokenDTO;
 import com.addressbook.dto.security.UserDTO;
 import com.addressbook.security.JwtTokenProvider;
 import com.addressbook.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,7 @@ import java.net.URI;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
+@Api(tags = "Auth", value = "AuthenticationCommands", description = "Controller for Authentication Commands")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -43,6 +47,7 @@ public class AuthController {
         this.userService = userService;
     }
 
+    @ApiOperation(value = "Register new user", authorizations = @Authorization(value="Authorization"))
     @PostMapping("/registration")
     public ResponseEntity<String> registerUser(@Valid @RequestBody UserDTO user) {
         UserDTO userDTO = userService.createUser(user);
@@ -56,6 +61,7 @@ public class AuthController {
         return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Authorize user", authorizations = @Authorization(value="Authorization"))
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> authenticateUser(@Valid @RequestBody CredentialsDTO credentials) {
         try{

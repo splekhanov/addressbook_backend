@@ -61,10 +61,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .antMatchers(
                             "/login",
+                            "/registration",
                             "/**/api-docs",
                             "/swagger**",
                             "/**/docs",
-                            "/registration",
+                            "/swagger-ui.html",
+                            "/",
                             "/h2-console/**",
                             "/**/webjars/**",
                             "/swagger-resources/**",
