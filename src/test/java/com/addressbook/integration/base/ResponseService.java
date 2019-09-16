@@ -8,16 +8,17 @@ import static io.restassured.RestAssured.given;
 
 public class ResponseService {
 
-    static ValidatableResponse sendPostRequest(RequestSpecification request) {
+    public static ValidatableResponse sendPostRequest(RequestSpecification request, Object body) {
         return given()
                 .relaxedHTTPSValidation()
                 .spec(request)
+                .body(body)
                 .when()
                 .post()
                 .then();
     }
 
-    static ValidatableResponse sendGetRequest(RequestSpecification request) {
+    public static ValidatableResponse sendGetRequest(RequestSpecification request) {
         return given()
                 .relaxedHTTPSValidation()
                 .spec(request)

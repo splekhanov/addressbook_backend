@@ -2,15 +2,13 @@ package com.addressbook.integration.model.contact;
 
 import com.addressbook.entity.IdentifiedEntity;
 import com.addressbook.entity.security.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class Contact implements IdentifiedEntity {
 
     private Long id;

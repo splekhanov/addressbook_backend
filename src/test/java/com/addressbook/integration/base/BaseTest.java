@@ -1,16 +1,18 @@
 package com.addressbook.integration.base;
 
+import com.addressbook.integration.model.security.Credentials;
+import com.addressbook.integration.model.security.Role;
+import com.addressbook.integration.model.security.User;
 import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.BeforeClass;
+
+import java.util.Arrays;
 
 import static io.restassured.RestAssured.given;
 
@@ -22,30 +24,35 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @LocalServerPort
     public int randomPort;
 
-    protected String authToken;
-
-    @BeforeClass
-    public void setToken() throws JSONException {
-        setAuthToken(login());
+    public String resource(String resource) {
+        return "http://localhost:" + randomPort + "/api/v1" + resource;
     }
 
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
-    }
-
-    public String login() throws JSONException {
-        String baseURI = "http://localhost:" + randomPort + "/api/v1/login";
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("username", "flash");
-        requestBody.put("password", "1234");
-        ValidatableResponse response =  given()
+    public Credentials createNewUser(String name, String pass, String role) {
+        User user = User.builder().name(name).password(pass).enabled(true).roles(Arrays.asList(new Role(role))).build();
+        String loginUri = "http://localhost:" + randomPort + "/api/v1/registration";
+        ValidatableResponse response = given()
                 .contentType(ContentType.JSON)
-                .baseUri(baseURI)
-                .body(requestBody.toString())
+                .baseUri(loginUri)
+                .body(user)
+                .log().all()
+                .when()
+                .filter(new ErrorLoggingFilter())
+                .post()
+                .then();
+        if (response.extract().statusCode() != 201) {
+            throw new RuntimeException("User " + user.getName() + " has not been created!");
+        }
+        return new Credentials(user.getName(), user.getPassword());
+    }
+
+    public String login(Credentials credentials) {
+        String loginUri = "http://localhost:" + randomPort + "/api/v1/login";
+        String token;
+        ValidatableResponse response = given()
+                .contentType(ContentType.JSON)
+                .baseUri(loginUri)
+                .body(credentials)
                 .log().all()
                 .when()
                 .filter(new ErrorLoggingFilter())
@@ -53,6 +60,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                 .then();
 
         JsonPath jsonPathEvaluator = response.extract().body().jsonPath();
-        return (String) jsonPathEvaluator.get("access_token");
+        token = jsonPathEvaluator.get("access_token");
+        if (token == null) {
+            throw new RuntimeException("Can't get auth token for user " + credentials.getUsername()
+                    + ". Please check that user exist and credentials are correct");
+        } else {
+            return token;
+        }
     }
 }
