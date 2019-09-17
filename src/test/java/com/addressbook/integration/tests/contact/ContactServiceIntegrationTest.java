@@ -83,10 +83,13 @@ public class ContactServiceIntegrationTest extends BaseTest {
         ValidatableResponse postResponse = sendPostRequest(createNewContactSpec, newContact);
         assertEquals(postResponse.extract().statusCode(), 201);
         Contact createdContact = postResponse.extract().as(Contact.class);
-
         List<Contact> expectedContacts = Arrays.asList(createdContact);
+
         RequestSpecification getContactRequestSpec = buildRequestSpec(url, token);
-        List<Contact> actualContacts = sendGetRequest(getContactRequestSpec).extract().body().jsonPath().getList("content", Contact.class);
+        ValidatableResponse getAllResponse = sendGetRequest(getContactRequestSpec);
+
+        assertEquals(getAllResponse.extract().statusCode(), 200);
+        List<Contact> actualContacts = getAllResponse.extract().body().jsonPath().getList("content", Contact.class);
         assertEquals(expectedContacts, actualContacts);
     }
 }
