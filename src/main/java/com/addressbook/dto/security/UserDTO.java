@@ -13,16 +13,18 @@ public class UserDTO implements IdentifiedDTO {
 
     private static final long serialVersionUID = -1102167282001305540L;
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(value = "The id", position = 1, hidden = true)
     private Long id;
 
+    @ApiModelProperty(value = "User name", position = 2)
     private String name;
 
+    @ApiModelProperty(value = "User password", position = 3)
     private String password;
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(value = "User status", position = 4, hidden = true)
     private boolean enabled;
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(value = "User roles", position = 5, hidden = true)
     private List<RoleDTO> roles;
 }

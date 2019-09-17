@@ -5,13 +5,17 @@ import com.addressbook.integration.model.contact.Contact;
 import com.addressbook.utils.mapper.contact.ContactMapper;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.testng.annotations.Test;
+
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.addressbook.integration.base.RequestSpecProvider.buildRequestSpec;
 import static com.addressbook.integration.base.ResponseService.sendGetRequest;
 import static com.addressbook.integration.base.ResponseService.sendPostRequest;
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class ContactServiceIntegrationTest extends BaseTest {
@@ -63,27 +67,26 @@ public class ContactServiceIntegrationTest extends BaseTest {
         assertEquals(actualContact, createdContact);
     }
 
-//    @Test
-//    public void getAllContacts() {
-//        String token = login(createNewUser("Fred", "123", "admin"));
-//        ValidatableResponse response = given()
-//                .contentType(ContentType.JSON)
-//                .auth()
-//                .oauth2(token)
-//                .log().all()
-//                .when()
-//                .filter(new ErrorLoggingFilter())
-//                .get("http://localhost:" + randomPort + "/api/v1/contacts")
-//                .then()
-//                .statusCode(200)
-//                .log()
-//                .body();
-//
-//        Contact expectedContact = new Contact (1L,"Brad","Pitt","+79811543120","bradpitt@yahoo.com");
-//
-//        List<Contact> expected = Arrays.asList(expectedContact);
-//        List<Contact> actual = response.extract().jsonPath().getList("content", Contact.class);
-//
-//        assertEquals(actual, expected);
-//    }
+    @Test
+    public void getAllContacts() {
+        String url = resource("/contacts/");
+        String token = login(createNewUser("Fred", "123", "admin"));
+
+        Contact newContact = Contact.builder()
+                .firstName("Jack")
+                .lastName("Nicholson")
+                .phone("+79811543120")
+                .email("nicholson@yahoo.com")
+                .build();
+
+        RequestSpecification createNewContactSpec = buildRequestSpec(url, token);
+        ValidatableResponse postResponse = sendPostRequest(createNewContactSpec, newContact);
+        assertEquals(postResponse.extract().statusCode(), 201);
+        Contact createdContact = postResponse.extract().as(Contact.class);
+
+        List<Contact> expectedContacts = Arrays.asList(createdContact);
+        RequestSpecification getContactRequestSpec = buildRequestSpec(url, token);
+        List<Contact> actualContacts = sendGetRequest(getContactRequestSpec).extract().body().jsonPath().getList("content", Contact.class);
+        assertEquals(expectedContacts, actualContacts);
+    }
 }

@@ -7,19 +7,19 @@ import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
 import java.util.Arrays;
-
 import static io.restassured.RestAssured.given;
 
 @TestPropertySource(
         locations = "classpath:application-integrationtest.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class BaseTest extends AbstractTestNGSpringContextTests {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class BaseTest {
 
     @LocalServerPort
     public int randomPort;
