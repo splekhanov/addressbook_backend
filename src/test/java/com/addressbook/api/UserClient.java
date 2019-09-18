@@ -8,7 +8,7 @@ import feign.Response;
 
 public interface UserClient {
 
-    @RequestLine("POST")
+    @RequestLine("POST /login")
     @Headers({"Content-Type: application/json"})
     Response login(CredentialsDTO credentialsDTO);
 }

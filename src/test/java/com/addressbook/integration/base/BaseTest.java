@@ -28,6 +28,11 @@ public class BaseTest {
         return "http://localhost:" + randomPort + "/api/v1" + resource;
     }
 
+    public String getUrl(){
+        return "http://localhost:" + randomPort + "/api/v1";
+    }
+
+
     public Credentials createNewUser(String name, String pass, String role) {
         User user = User.builder().name(name).password(pass).enabled(true).roles(Arrays.asList(new Role(role))).build();
         String loginUri = "http://localhost:" + randomPort + "/api/v1/registration";
