@@ -4,8 +4,7 @@ import com.addressbook.dto.contact.ContactDTO;
 import com.addressbook.entity.contact.Contact;
 import com.addressbook.entity.security.User;
 import com.addressbook.exceptions.ContactAlreadyExist;
-import com.addressbook.exceptions.ContactNotFound;
-import com.addressbook.exceptions.NotFoundException;
+import com.addressbook.exceptions.ResourceNotFoundException;
 import com.addressbook.repository.contact.ContactRepository;
 import com.addressbook.repository.security.UserRepository;
 import com.addressbook.service.ContactService;
@@ -37,7 +36,7 @@ public class ContactServiceImpl implements ContactService {
         User currentUser = currentUser();
         Contact contact = contactRepository.findById(id).orElse(null);
         if (contact == null || !contact.getUser().equals(currentUser)) {
-            throw new NotFoundException("No contact with id " + id + " was found");
+            throw new ResourceNotFoundException("No contact with id " + id + " was found");
         }
         return contactMapper.toDto(contact);
     }
@@ -53,7 +52,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public void deleteContact(Long id) {
         contactRepository.findById(id)
-                .orElseThrow(() -> new ContactNotFound("Contact with id '" + id + "' not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Contact with id '" + id + "' not found"));
         contactRepository.deleteById(id);
     }
 
@@ -66,7 +65,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ContactDTO editContact(ContactDTO contactDTO) {
         contactRepository.findById(contactDTO.getId())
-                .orElseThrow(() -> new ContactNotFound("Contact with id '" + contactDTO.getId() + "' not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Contact with id '" + contactDTO.getId() + "' not found"));
         return saveContactInRepository(contactDTO);
     }
 

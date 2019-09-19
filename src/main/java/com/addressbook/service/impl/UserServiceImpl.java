@@ -4,8 +4,8 @@ import com.addressbook.dto.security.RoleDTO;
 import com.addressbook.dto.security.UserDTO;
 import com.addressbook.entity.security.Role;
 import com.addressbook.entity.security.User;
-import com.addressbook.exceptions.AdminDeletionForbiddenException;
-import com.addressbook.exceptions.NotFoundException;
+import com.addressbook.exceptions.ResourceNotFoundException;
+import com.addressbook.exceptions.UserAlreadyExistsException;
 import com.addressbook.repository.security.RoleRepository;
 import com.addressbook.repository.security.UserRepository;
 import com.addressbook.service.UserService;
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO createUser(UserDTO userDTO) {
         if (userRepository.findByName(userDTO.getName()).isPresent()) {
-            throw new RuntimeException(String.format("User with name '%s' already exists!", userDTO.getName()));
+            throw new UserAlreadyExistsException(String.format("User with name '%s' already exists!", userDTO.getName()));
         }
         Role userRole = roleRepository.findByName("admin").orElse(new Role("admin"));
         List<RoleDTO> userRolesDTO = new ArrayList<>();
@@ -57,16 +57,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserByUserName(String userName) {
-        User user = userRepository.findByName(userName).orElseThrow(() -> new RuntimeException(String.format("User with name '%s' not found!", userName)));
-        if (user.getRoles().stream().anyMatch(role -> "admin".equals(role.getName()))) {
-            throw new AdminDeletionForbiddenException("You can not delete admin!");
-        }
+    public void deleteUserById(Long id) {
+        User user = findUserById(id);
         if (!user.isEnabled()) {
-            throw new NotFoundException("User has already been deleted");
+            throw new ResourceNotFoundException("User has been already deleted");
         } else {
             user.setEnabled(false);
             userRepository.save(user);
         }
+    }
+
+    @Override
+    public UserDTO getUserById(Long id) {
+        User result = findUserById(id);
+        return userMapper.toDto(result);
+    }
+
+    @Override
+    public UserDTO getUserByName(String name) {
+        User result = userRepository.findByName(name).orElseThrow(() ->
+                new ResourceNotFoundException(String.format("User with name '%s' not found!", name)));
+        return userMapper.toDto(result);
+    }
+
+    private User findUserById(Long id){
+        return userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format("User with name '%d' not found!", id)));
     }
 }

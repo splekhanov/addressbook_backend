@@ -49,7 +49,7 @@ public class AuthController {
 
     @ApiOperation(value = "Register new user", authorizations = @Authorization(value="Authorization"))
     @PostMapping("/registration")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserDTO user) {
+    public ResponseEntity<Void> registerUser(@Valid @RequestBody UserDTO user) {
         UserDTO userDTO = userService.createUser(user);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -58,7 +58,7 @@ public class AuthController {
                 .toUri();
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setLocation(location);
-        return new ResponseEntity<String>(responseHeaders, HttpStatus.CREATED);
+        return ResponseEntity.created(location).build();
     }
 
     @ApiOperation(value = "Authorize user", authorizations = @Authorization(value="Authorization"))

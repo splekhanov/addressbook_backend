@@ -10,5 +10,9 @@ public interface UserService {
 
 //    Page<UserDTO> getAllUsers(Pageable pageable);
 
-    void deleteUserByUserName(String name);
+    UserDTO getUserById(Long id);
+
+    UserDTO getUserByName(String name);
+
+    void deleteUserById(Long id);
 }

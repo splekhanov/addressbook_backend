@@ -1,16 +1,16 @@
 package com.addressbook.controller.user;
 
+import com.addressbook.dto.security.UserDTO;
 import com.addressbook.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.ResponseEntity.noContent;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @Api(tags = "User", value = "UserCommands", description = "Controller for User Commands")
@@ -23,10 +23,22 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ApiOperation(value = "Delete user by name", authorizations = @Authorization(value="Authorization"))
-    @DeleteMapping("/user/{name}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String name) {
-        userService.deleteUserByUserName(name);
+    @ApiOperation(value = "Delete user by id", authorizations = @Authorization(value="Authorization"))
+    @PutMapping("/users/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUserById(id);
         return noContent().build();
+    }
+
+    @ApiOperation(value = "Get user by id", authorizations = @Authorization(value="Authorization"))
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        return ok(userService.getUserById(id));
+    }
+
+    @ApiOperation(value = "Get user by name", authorizations = @Authorization(value="Authorization"))
+    @GetMapping("/users")
+    public ResponseEntity<UserDTO> getUserByName(@RequestParam String name) {
+        return ok(userService.getUserByName(name));
     }
 }
