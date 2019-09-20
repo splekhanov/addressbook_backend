@@ -24,10 +24,17 @@ public class UserController {
     }
 
     @ApiOperation(value = "Delete user by id", authorizations = @Authorization(value="Authorization"))
-    @PutMapping("/users/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
-        return noContent().build();
+        return ok().build();
+    }
+
+    @ApiOperation(value = "Undelete user by id", authorizations = @Authorization(value="Authorization"))
+    @PutMapping("/users/{id}/undelete")
+    public ResponseEntity<Void> undeleteUser(@PathVariable Long id) {
+        userService.undeleteUser(id);
+        return ok().build();
     }
 
     @ApiOperation(value = "Get user by id", authorizations = @Authorization(value="Authorization"))

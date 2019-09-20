@@ -6,13 +6,15 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
-    UserDTO createUser(UserDTO user);
+    void createUser(UserDTO user);
 
 //    Page<UserDTO> getAllUsers(Pageable pageable);
 
     UserDTO getUserById(Long id);
 
     UserDTO getUserByName(String name);
+
+    void undeleteUser(Long id);
 
     void deleteUserById(Long id);
 }

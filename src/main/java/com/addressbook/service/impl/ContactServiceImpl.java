@@ -3,7 +3,7 @@ package com.addressbook.service.impl;
 import com.addressbook.dto.contact.ContactDTO;
 import com.addressbook.entity.contact.Contact;
 import com.addressbook.entity.security.User;
-import com.addressbook.exceptions.ContactAlreadyExist;
+import com.addressbook.exceptions.ContactAlreadyExistsException;
 import com.addressbook.exceptions.ResourceNotFoundException;
 import com.addressbook.repository.contact.ContactRepository;
 import com.addressbook.repository.security.UserRepository;
@@ -44,7 +44,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ContactDTO addContact(ContactDTO contactDTO) {
         contactRepository.findContactByFirstName(contactDTO.getFirstName()).ifPresent(e -> {
-            throw new ContactAlreadyExist("Contact with name '" + e.getFirstName() + "' is already exists");
+            throw new ContactAlreadyExistsException("Contact with name '" + e.getFirstName() + "' is already exists");
         });
         return saveContactInRepository(contactDTO);
     }

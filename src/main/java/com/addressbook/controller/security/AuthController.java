@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -47,10 +46,11 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @ApiOperation(value = "Register new user", authorizations = @Authorization(value="Authorization"))
+    @ApiOperation(value = "Register new user")
     @PostMapping("/registration")
     public ResponseEntity<Void> registerUser(@Valid @RequestBody UserDTO user) {
-        UserDTO userDTO = userService.createUser(user);
+        userService.createUser(user);
+        UserDTO userDTO = userService.getUserByName(user.getName());
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -61,7 +61,7 @@ public class AuthController {
         return ResponseEntity.created(location).build();
     }
 
-    @ApiOperation(value = "Authorize user", authorizations = @Authorization(value="Authorization"))
+    @ApiOperation(value = "Authorize user")
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> authenticateUser(@Valid @RequestBody CredentialsDTO credentials) {
         try{

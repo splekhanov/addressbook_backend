@@ -18,9 +18,13 @@ public interface UserClient {
     @Headers({"Content-Type: application/json", "Authorization: Bearer {token}"})
     Response login(CredentialsDTO credentialsDTO);
 
-    @RequestLine("PUT /users/{id}")
+    @RequestLine("DELETE /users/{id}")
     @Headers({"Content-Type: application/json", "Authorization: Bearer {token}"})
     Response deleteUserById(@Param("token") String token, @Param("id") Long id);
+
+    @RequestLine("PUT /users/{id}/undelete")
+    @Headers({"Content-Type: application/json", "Authorization: Bearer {token}"})
+    Response undeleteUser(@Param("token") String token, @Param("id") Long id);
 
     @RequestLine("GET /users/{id}")
     @Headers({"Content-Type: application/json", "Authorization: Bearer {token}"})

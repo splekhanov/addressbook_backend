@@ -5,6 +5,7 @@ import com.addressbook.dto.security.UserDTO;
 import com.addressbook.entity.security.Role;
 import com.addressbook.entity.security.User;
 import com.addressbook.exceptions.ResourceNotFoundException;
+import com.addressbook.exceptions.UserAlreadyActiveException;
 import com.addressbook.exceptions.UserAlreadyExistsException;
 import com.addressbook.repository.security.RoleRepository;
 import com.addressbook.repository.security.UserRepository;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO createUser(UserDTO userDTO) {
+    public void createUser(UserDTO userDTO) {
         if (userRepository.findByName(userDTO.getName()).isPresent()) {
             throw new UserAlreadyExistsException(String.format("User with name '%s' already exists!", userDTO.getName()));
         }
@@ -52,18 +53,28 @@ public class UserServiceImpl implements UserService {
         User entity = userMapper.toEntity(userDTO);
         entity.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         entity.setEnabled(true);
-        User result = userRepository.saveAndFlush(entity);
-        return userMapper.toDto(result);
+        userRepository.saveAndFlush(entity);
     }
 
     @Override
     public void deleteUserById(Long id) {
         User user = findUserById(id);
         if (!user.isEnabled()) {
-            throw new ResourceNotFoundException("User has been already deleted");
+            throw new ResourceNotFoundException("User has been deleted");
         } else {
             user.setEnabled(false);
             userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void undeleteUser(Long id) {
+        User userToUndelete = findUserById(id);
+        if (userToUndelete.isEnabled()) {
+            throw new UserAlreadyActiveException(String.format("User with ID %d is already active and doesn't need to be restored", id));
+        } else {
+            userToUndelete.setEnabled(true);
+            userRepository.save(userToUndelete);
         }
     }
 

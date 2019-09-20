@@ -42,7 +42,7 @@ public class BaseTest {
         return "http://localhost:" + randomPort + "/api/v1";
     }
 
-    public <T> T toPojo(Reader reader, Class<T> type) {
+    public static <T> T toPojo(Reader reader, Class<T> type) {
         Gson gson = new Gson();
         return gson.fromJson(reader, type);
     }
