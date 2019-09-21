@@ -2,11 +2,13 @@ package com.addressbook.dto.contact;
 
 import com.addressbook.dto.IdentifiedDTO;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 @Data
 @EqualsAndHashCode
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ContactDTO implements IdentifiedDTO {
 
     private static final long serialVersionUID = 3365726615380640830L;

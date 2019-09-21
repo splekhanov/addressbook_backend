@@ -6,6 +6,7 @@ import com.addressbook.dto.security.CredentialsDTO;
 import com.addressbook.dto.security.RoleDTO;
 import com.addressbook.dto.security.UserDTO;
 import feign.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 

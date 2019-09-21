@@ -1,6 +1,9 @@
 package com.addressbook.api.base;
 
+import com.addressbook.api.clients.ContactClient;
 import com.addressbook.api.clients.UserClient;
+import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.RandomService;
 import com.google.gson.Gson;
 import feign.Feign;
 import feign.Logger;
@@ -19,6 +22,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Locale;
 
 @EqualsAndHashCode
 @Data
@@ -31,13 +35,15 @@ public class BaseTest {
     @LocalServerPort
     public int randomPort;
 
-    public String url;
-    public UserClient userClient;
+    public static String url;
+    public static UserClient userClient;
+    public static ContactClient contactClient;
 
     @BeforeAll
     public void init() {
         url = constructUrl();
-        userClient = initUserClient();
+        userClient = createClient(UserClient.class);
+        contactClient = createClient(ContactClient.class);
     }
 
     public String constructUrl() {
@@ -49,15 +55,25 @@ public class BaseTest {
         return gson.fromJson(response.body().asReader(), type);
     }
 
-    //--------------CLIENTS---------------
+    public String generateRandomUsername(){
+        FakeValuesService fakeValuesService = new FakeValuesService(
+                new Locale("en-GB"), new RandomService());
+        return fakeValuesService.regexify("[a-z1-9]{10}");
+    }
 
-    private UserClient initUserClient() {
+    public Long generateRandomUserId(){
+        FakeValuesService fakeValuesService = new FakeValuesService(
+                new Locale("en-GB"), new RandomService());
+        return Long.parseLong(fakeValuesService.regexify("[1-9]{10}"));
+    }
+
+    private <T> T createClient(Class<T> type){
         return Feign.builder()
                 .client(new OkHttpClient())
                 .encoder(new GsonEncoder())
                 .decoder(new GsonDecoder())
-                .logger(new Slf4jLogger(UserClient.class))
+                .logger(new Slf4jLogger(type))
                 .logLevel(Logger.Level.FULL)
-                .target(UserClient.class, getUrl());
+                .target(type, url);
     }
 }

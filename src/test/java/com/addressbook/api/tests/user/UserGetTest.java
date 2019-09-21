@@ -5,6 +5,7 @@ import com.addressbook.api.model.TokenDTO;
 import com.addressbook.dto.security.CredentialsDTO;
 import com.addressbook.dto.security.UserDTO;
 import feign.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -14,12 +15,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserGetTest extends UserBaseTest {
 
+    TokenDTO token;
+
+    @BeforeEach
+    public void getToken() throws IOException {
+        CredentialsDTO credentials = new CredentialsDTO(generateRandomUsername(), "12345");
+        token = registerNewUserAndLogin(credentials);
+    }
+
     @Test
     public void testIfGetNonexistentUserByNameNotFoundExceptionReturns() throws IOException {
-        String nonExistentUserName = "someUsergfgdfgdf";
-        CredentialsDTO credentials = new CredentialsDTO("Addie", "12345");
-        TokenDTO token = registerNewUserAndLogin(credentials);
-
+        String nonExistentUserName = generateRandomUsername();
         Response getUserResponse = userClient.getUserByName(token.getAccess_token(),nonExistentUserName);
         ErrorDetails error = toPojo(getUserResponse, ErrorDetails.class);
         assertEquals(getUserResponse.status(), HttpStatus.NOT_FOUND.value());
@@ -28,9 +34,7 @@ public class UserGetTest extends UserBaseTest {
 
     @Test
     public void testIfGetNonexistentUserByIdNotFoundExceptionReturns() throws IOException {
-        Long nonExistentUserId = 434344234L;
-        CredentialsDTO credentials = new CredentialsDTO("Tod", "12345");
-        TokenDTO token = registerNewUserAndLogin(credentials);
+        Long nonExistentUserId = generateRandomUserId();
 
         Response getUserResponse = userClient.getUserById(token.getAccess_token(),nonExistentUserId);
         ErrorDetails error = toPojo(getUserResponse, ErrorDetails.class);

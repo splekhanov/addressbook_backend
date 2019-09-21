@@ -15,7 +15,7 @@ public interface UserClient {
     Response register(UserDTO userDTO);
 
     @RequestLine("POST /login")
-    @Headers({"Content-Type: application/json", "Authorization: Bearer {token}"})
+    @Headers({"Content-Type: application/json"})
     Response login(CredentialsDTO credentialsDTO);
 
     @RequestLine("DELETE /users/{id}")
