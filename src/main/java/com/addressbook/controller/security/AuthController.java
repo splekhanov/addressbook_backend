@@ -4,6 +4,7 @@ import com.addressbook.dto.security.CredentialsDTO;
 
 import com.addressbook.dto.security.TokenDTO;
 import com.addressbook.dto.security.UserDTO;
+import com.addressbook.exceptions.InvalidCredentialsException;
 import com.addressbook.security.JwtTokenProvider;
 import com.addressbook.service.UserService;
 import io.swagger.annotations.Api;
@@ -64,17 +65,17 @@ public class AuthController {
     @ApiOperation(value = "Authorize user")
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> authenticateUser(@Valid @RequestBody CredentialsDTO credentials) {
-        try{
+        try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword())
             );
-            if(authentication.isAuthenticated()){
+            if (authentication.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             String jwt = tokenProvider.generateToken(authentication);
             return ok(TokenDTO.builder().accessToken(jwt).build());
-        } catch (AuthenticationException e){
-            throw new BadCredentialsException("Invalid email/password");
+        } catch (BadCredentialsException e) {
+            throw new InvalidCredentialsException("Invalid login or password");
         }
     }
 }

@@ -25,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByName(username);
         if (!user.isPresent()) {
-            throw new UsernameNotFoundException("UserDTO not found with username or email : " + username);
+            throw new UsernameNotFoundException("UserDTO not found with username : " + username);
         }
         return UserPrincipal.create(user.orElse(null));
     }

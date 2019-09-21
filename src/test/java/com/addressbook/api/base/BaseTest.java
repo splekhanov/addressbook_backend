@@ -4,6 +4,7 @@ import com.addressbook.api.clients.UserClient;
 import com.google.gson.Gson;
 import feign.Feign;
 import feign.Logger;
+import feign.Response;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import feign.okhttp.OkHttpClient;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
 
+import java.io.IOException;
 import java.io.Reader;
 
 @EqualsAndHashCode
@@ -42,9 +44,9 @@ public class BaseTest {
         return "http://localhost:" + randomPort + "/api/v1";
     }
 
-    public static <T> T toPojo(Reader reader, Class<T> type) {
+    public static <T> T toPojo(Response response, Class<T> type) throws IOException {
         Gson gson = new Gson();
-        return gson.fromJson(reader, type);
+        return gson.fromJson(response.body().asReader(), type);
     }
 
     //--------------CLIENTS---------------
