@@ -15,7 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ContactServiceImpl implements ContactService {
@@ -57,9 +59,9 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Page<ContactDTO> getAllContacts(Pageable pageable) {
+    public List<ContactDTO> getAllContacts() {
         User currentUser = currentUser();
-        return contactRepository.findAllByUser(currentUser, pageable).map(contactMapper::toDto);
+        return contactRepository.findAllByUser(currentUser).stream().map(contactMapper::toDto).collect(Collectors.toList());
     }
 
     @Override

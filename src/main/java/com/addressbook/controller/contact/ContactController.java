@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -60,8 +61,8 @@ public class ContactController {
 
     @ApiOperation(value = "Get all user contacts", authorizations = @Authorization(value="Authorization"))
     @GetMapping(value = "/contacts", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Page<ContactDTO>> getAllContacts(Pageable pageable) {
-        return ok(contactService.getAllContacts(pageable));
+    public ResponseEntity<List<ContactDTO>> getAllContacts() {
+        return ok(contactService.getAllContacts());
     }
 
     @ApiOperation(value = "Delete contact", authorizations = @Authorization(value="Authorization"))
