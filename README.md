@@ -1,7 +1,7 @@
 # ADDRESSBOOK RESTful WEB SERVICE
 Application created with Spring Boot and Hibernate integration.
 
-###Stack:
+### Tech:
 1. [Java 8](https://java.com/)
 1. [Spring Boot](https://spring.io/)
 1. [Spring Data](https://spring.io/projects/spring-data/)
