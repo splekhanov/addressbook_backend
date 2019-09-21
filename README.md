@@ -15,6 +15,6 @@ Documentation provided by [Swagger](https://swagger.io/) and available at:
 To authorize in Swagger UI:
 1. Create new user /registration
 2. Login /login
-3. Copy access_token token from response
+3. Copy access_token value from response
 4. Click "Authorize"
 5. Insert token with prefix "Bearer ": Bearer access_token
