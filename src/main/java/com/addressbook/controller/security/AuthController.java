@@ -3,31 +3,23 @@ package com.addressbook.controller.security;
 import com.addressbook.dto.security.CredentialsDTO;
 
 import com.addressbook.dto.security.TokenDTO;
-import com.addressbook.dto.security.UserDTO;
 import com.addressbook.exceptions.InvalidCredentialsException;
 import com.addressbook.security.JwtTokenProvider;
 import com.addressbook.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-
-import java.net.URI;
-
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -47,23 +39,8 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @ApiOperation(value = "Register new user")
-    @PostMapping("/registration")
-    public ResponseEntity<Void> registerUser(@Valid @RequestBody UserDTO user) {
-        userService.createUser(user);
-        UserDTO userDTO = userService.getUserByName(user.getName());
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(userDTO.getId())
-                .toUri();
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setLocation(location);
-        return ResponseEntity.created(location).build();
-    }
-
-    @ApiOperation(value = "Authorize user")
-    @PostMapping("/login")
+    @ApiOperation(value = "Authorize user and get Bearer token")
+    @PostMapping("/auth")
     public ResponseEntity<TokenDTO> authenticateUser(@Valid @RequestBody CredentialsDTO credentials) {
         try {
             Authentication authentication = authenticationManager.authenticate(

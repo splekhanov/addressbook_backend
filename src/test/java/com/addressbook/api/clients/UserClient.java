@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public interface UserClient {
 
-    @RequestLine("POST /registration")
+    @RequestLine("POST /users/registration")
     @Headers({"Content-Type: application/json"})
     Response register(UserDTO userDTO);
 
-    @RequestLine("POST /login")
+    @RequestLine("POST /auth")
     @Headers({"Content-Type: application/json"})
     Response login(CredentialsDTO credentialsDTO);
 
