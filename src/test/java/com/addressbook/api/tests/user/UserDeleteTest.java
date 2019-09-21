@@ -16,7 +16,7 @@ public class UserDeleteTest extends UserBaseTest {
     @Test
     public void testUserCanBeDeleted() throws IOException {
         CredentialsDTO credentials = new CredentialsDTO("David", "12345");
-        TokenDTO token = registerNewUserAndLogIn(credentials);
+        TokenDTO token = registerNewUserAndLogin(credentials);
         UserDTO createdUser = getUserByName(credentials, token);
         Response userDeleteResponse = userClient.deleteUserById(token.getAccess_token(), createdUser.getId());
         assertEquals(userDeleteResponse.status(), HttpStatus.OK.value());
@@ -25,7 +25,7 @@ public class UserDeleteTest extends UserBaseTest {
     @Test
     public void testIfUserAlreadyDeletedNotFoundExceptionReturns() throws IOException {
         CredentialsDTO credentials = new CredentialsDTO("Bill", "12345");
-        TokenDTO token = registerNewUserAndLogIn(credentials);
+        TokenDTO token = registerNewUserAndLogin(credentials);
         UserDTO createdUser = getUserByName(credentials, token);
         Response userDeleteResponse = userClient.deleteUserById(token.getAccess_token(), createdUser.getId());
         assertEquals(userDeleteResponse.status(), HttpStatus.OK.value());

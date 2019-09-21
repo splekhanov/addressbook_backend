@@ -18,7 +18,7 @@ public class UserUndeleteTest extends UserBaseTest {
     @Test
     public void testUserCanBeUndeleted() throws IOException {
         CredentialsDTO credentials = new CredentialsDTO("Margo", "12345");
-        TokenDTO token = registerNewUserAndLogIn(credentials);
+        TokenDTO token = registerNewUserAndLogin(credentials);
         UserDTO createdUser = getUserByName(credentials, token);
         Response userDeleteResponse = userClient.deleteUserById(token.getAccess_token(), createdUser.getId());
         assertEquals(userDeleteResponse.status(), HttpStatus.OK.value());
@@ -28,9 +28,9 @@ public class UserUndeleteTest extends UserBaseTest {
     }
 
     @Test
-    public void testIfUndeleteActiveUserBadRequestExceptionReturns() throws IOException {
+    public void testIfUndeleteActiveUserUnauthorizedExceptionReturns() throws IOException {
         CredentialsDTO credentials = new CredentialsDTO("Daniel", "12345");
-        TokenDTO token = registerNewUserAndLogIn(credentials);
+        TokenDTO token = registerNewUserAndLogin(credentials);
         UserDTO createdUser = getUserByName(credentials, token);
 
         Response userUndeleteResponse = userClient.undeleteUser(token.getAccess_token(), createdUser.getId());

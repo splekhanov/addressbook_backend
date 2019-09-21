@@ -25,7 +25,7 @@ public class UserBaseTest extends BaseTest {
         return toPojo(userLoginResponse, TokenDTO.class);
     }
 
-    public TokenDTO registerNewUserAndLogIn(CredentialsDTO credentials) throws IOException {
+    public TokenDTO registerNewUserAndLogin(CredentialsDTO credentials) throws IOException {
         registerNewUser(credentials);
         return loginAndGetToken(credentials);
     }
