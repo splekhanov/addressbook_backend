@@ -9,6 +9,6 @@ Application created with Spring Boot and Hibernate integration.
 
 ### API
 Documentation provided by [Swagger](https://swagger.io/) and available at:
-```text
-http://localhost:8080/api/v1/
-```
+
+[https://addressbook-automation.herokuapp.com/api/v1/](https://addressbook-automation.herokuapp.com/api/v1/)
+
