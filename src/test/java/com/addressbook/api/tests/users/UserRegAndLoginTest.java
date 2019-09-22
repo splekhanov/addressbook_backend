@@ -21,7 +21,7 @@ public class UserRegAndLoginTest extends UserBaseTest {
     public void testUserCanRegister() throws IOException {
         CredentialsDTO credentials = new CredentialsDTO("Elvis", "12345");
         Response newUserResponse = registerNewUser(credentials);
-        assertEquals(newUserResponse.status(), HttpStatus.CREATED.value());
+        assertEquals(HttpStatus.CREATED.value(), newUserResponse.status());
 
         TokenDTO token = loginAndGetToken(credentials);
         UserDTO createdUser = getUserByName(credentials, token);
@@ -36,16 +36,16 @@ public class UserRegAndLoginTest extends UserBaseTest {
     public void testFailToRegisterIfUserWithTheSameNameAlreadyExists() throws IOException {
         CredentialsDTO credentials = new CredentialsDTO("James", "12345");
         Response userRegResponse = registerNewUser(credentials);
-        assertEquals(userRegResponse.status(), HttpStatus.CREATED.value());
+        assertEquals(HttpStatus.CREATED.value(), userRegResponse.status());
         Response userSecondRegResponse = registerNewUser(credentials);
-        assertEquals(userSecondRegResponse.status(), HttpStatus.CONFLICT.value());
+        assertEquals(HttpStatus.CONFLICT.value(), userSecondRegResponse.status());
     }
 
     @Test
     public void testUserCanLoginIfExists() throws IOException {
         CredentialsDTO credentials = new CredentialsDTO("Curt", "12345");
         Response userRegResponse = registerNewUser(credentials);
-        assertEquals(userRegResponse.status(), HttpStatus.CREATED.value());
+        assertEquals(HttpStatus.CREATED.value(), userRegResponse.status());
         TokenDTO token = loginAndGetToken(credentials);
         assertNotNull(token.getAccess_token(), "Token hasn't been received");
     }
@@ -54,12 +54,12 @@ public class UserRegAndLoginTest extends UserBaseTest {
     public void testLoginWithWrongPasswordReturnsException() throws IOException {
         CredentialsDTO credentials = new CredentialsDTO("Damien", "12345");
         Response userRegResponse = registerNewUser(credentials);
-        assertEquals(userRegResponse.status(), HttpStatus.CREATED.value());
+        assertEquals(HttpStatus.CREATED.value(), userRegResponse.status());
 
         CredentialsDTO wrongCredentials = new CredentialsDTO("Damien", "123456");
         Response loginResponse = login(wrongCredentials);
         ErrorDetails error = toPojo(loginResponse, ErrorDetails.class);
-        assertEquals(loginResponse.status(), HttpStatus.UNAUTHORIZED.value());
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), loginResponse.status());
         assertEquals(error.getMessage(), "Invalid login or password");
     }
 
@@ -68,7 +68,7 @@ public class UserRegAndLoginTest extends UserBaseTest {
         CredentialsDTO wrongCredentials = new CredentialsDTO("nonexistentUser", "12345");
         Response loginResponse = login(wrongCredentials);
         ErrorDetails error = toPojo(loginResponse, ErrorDetails.class);
-        assertEquals(loginResponse.status(), HttpStatus.UNAUTHORIZED.value());
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), loginResponse.status());
         assertEquals(error.getMessage(), "Invalid login or password");
     }
 }

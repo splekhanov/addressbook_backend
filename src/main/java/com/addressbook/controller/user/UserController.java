@@ -17,7 +17,7 @@ import java.net.URI;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@Api(tags = "User", value = "UserCommands", description = "Controller for User Commands")
+@Api(tags = "Users", value = "UserCommands", description = "Controller for User Commands")
 public class UserController {
 
     private final UserService userService;

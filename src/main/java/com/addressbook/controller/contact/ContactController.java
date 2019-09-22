@@ -19,7 +19,7 @@ import java.util.List;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@Api(tags = "Contact", value = "ContactCommands", description = "Controller for Contact Commands")
+@Api(tags = "Contacts", value = "ContactCommands", description = "Controller for Contact Commands")
 public class ContactController {
 
     private final ContactService contactService;

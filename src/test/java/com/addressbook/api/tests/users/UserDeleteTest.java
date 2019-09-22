@@ -28,23 +28,23 @@ public class UserDeleteTest extends UserBaseTest {
     @Test
     public void testUserCanBeDeleted() throws IOException {
         Response userDeleteResponse = userClient.deleteUserById(token.getAccess_token(), user.getId());
-        assertEquals(userDeleteResponse.status(), HttpStatus.OK.value());
+        assertEquals(HttpStatus.OK.value(), userDeleteResponse.status());
         checkUserHasBeenDeleted();
     }
 
     @Test
     public void testIfUserAlreadyDeletedNotFoundExceptionReturns() throws IOException {
         Response userDeleteResponse = userClient.deleteUserById(token.getAccess_token(), user.getId());
-        assertEquals(userDeleteResponse.status(), HttpStatus.OK.value());
+        assertEquals(HttpStatus.OK.value(), userDeleteResponse.status());
         checkUserHasBeenDeleted();
 
         Response userSecondDeleteResponse = userClient.deleteUserById(token.getAccess_token(), user.getId());
-        assertEquals(userSecondDeleteResponse.status(), HttpStatus.NOT_FOUND.value());
+        assertEquals(HttpStatus.NOT_FOUND.value(), userSecondDeleteResponse.status());
     }
 
     void checkUserHasBeenDeleted() throws IOException {
         Response deletedUserResponse = userClient.getUserById(token.getAccess_token(), user.getId());
-        assertEquals(deletedUserResponse.status(), HttpStatus.OK.value());
+        assertEquals(HttpStatus.OK.value(), deletedUserResponse.status());
         UserDTO deletedUser = toPojo(deletedUserResponse, UserDTO.class);
         assertFalse(deletedUser.isEnabled());
     }

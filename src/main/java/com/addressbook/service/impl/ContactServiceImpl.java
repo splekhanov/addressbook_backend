@@ -11,8 +11,6 @@ import com.addressbook.service.ContactService;
 import com.addressbook.utils.UserUtils;
 import com.addressbook.utils.mapper.contact.ContactMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,11 +33,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ContactDTO getContact(Long id) {
-        User currentUser = currentUser();
-        Contact contact = contactRepository.findById(id).orElse(null);
-        if (contact == null || !contact.getUser().equals(currentUser)) {
-            throw new ResourceNotFoundException("No contact with id " + id + " was found");
-        }
+        Contact contact = findContactById(id);
         return contactMapper.toDto(contact);
     }
 
@@ -53,8 +47,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public void deleteContact(Long id) {
-        contactRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Contact with id '" + id + "' not found"));
+        findContactById(id);
         contactRepository.deleteById(id);
     }
 
@@ -69,6 +62,15 @@ public class ContactServiceImpl implements ContactService {
         contactRepository.findById(contactDTO.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Contact with id '" + contactDTO.getId() + "' not found"));
         return saveContactInRepository(contactDTO);
+    }
+
+    private Contact findContactById(Long id){
+        User currentUser = currentUser();
+        Contact contact = contactRepository.findById(id).orElse(null);
+        if (contact == null || !contact.getUser().equals(currentUser)) {
+            throw new ResourceNotFoundException("No contact with id " + id + " was found");
+        }
+        return contact;
     }
 
     private ContactDTO saveContactInRepository(ContactDTO contactDTO) {

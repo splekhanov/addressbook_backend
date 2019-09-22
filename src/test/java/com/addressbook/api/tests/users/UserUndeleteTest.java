@@ -29,11 +29,11 @@ public class UserUndeleteTest extends UserBaseTest {
     @Test
     public void testUserCanBeUndeleted() throws IOException {
         Response userDeleteResponse = userClient.deleteUserById(token.getAccess_token(), user.getId());
-        assertEquals(userDeleteResponse.status(), HttpStatus.OK.value());
+        assertEquals(HttpStatus.OK.value(), userDeleteResponse.status());
 
 
         Response userUndeleteResponse = userClient.undeleteUser(token.getAccess_token(), user.getId());
-        assertEquals(userUndeleteResponse.status(), HttpStatus.OK.value());
+        assertEquals(HttpStatus.OK.value(), userUndeleteResponse.status());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class UserUndeleteTest extends UserBaseTest {
         UserDTO createdUser = getUserByName(credentials, token);
 
         Response userUndeleteResponse = userClient.undeleteUser(token.getAccess_token(), createdUser.getId());
-        assertEquals(userUndeleteResponse.status(), HttpStatus.BAD_REQUEST.value());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), userUndeleteResponse.status());
     }
 
 }

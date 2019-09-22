@@ -28,7 +28,7 @@ public class UserGetTest extends UserBaseTest {
         String nonExistentUserName = generateRandomUsername();
         Response getUserResponse = userClient.getUserByName(token.getAccess_token(),nonExistentUserName);
         ErrorDetails error = toPojo(getUserResponse, ErrorDetails.class);
-        assertEquals(getUserResponse.status(), HttpStatus.NOT_FOUND.value());
+        assertEquals(HttpStatus.NOT_FOUND.value(), getUserResponse.status());
         assertEquals(error.getMessage(), String.format("User with name '%s' not found!", nonExistentUserName));
     }
 
@@ -38,7 +38,7 @@ public class UserGetTest extends UserBaseTest {
 
         Response getUserResponse = userClient.getUserById(token.getAccess_token(),nonExistentUserId);
         ErrorDetails error = toPojo(getUserResponse, ErrorDetails.class);
-        assertEquals(getUserResponse.status(), HttpStatus.NOT_FOUND.value());
+        assertEquals(HttpStatus.NOT_FOUND.value(), getUserResponse.status());
         assertEquals(error.getMessage(), String.format("User with name '%d' not found!", nonExistentUserId));
     }
 }

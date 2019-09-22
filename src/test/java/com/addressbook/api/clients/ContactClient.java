@@ -17,4 +17,8 @@ public interface ContactClient {
     @RequestLine("GET /contacts/{id}")
     @Headers({"Content-Type: application/json", "Authorization: Bearer {token}"})
     Response getContactById(@Param("token") String token, @Param("id") Long id);
+
+    @RequestLine("DELETE /contacts/{id}")
+    @Headers({"Content-Type: application/json", "Authorization: Bearer {token}"})
+    Response deleteContactById(@Param("token") String token, @Param("id") Long id);
 }
