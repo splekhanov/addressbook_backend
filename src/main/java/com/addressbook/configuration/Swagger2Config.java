@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @PropertySource("classpath:swagger.properties")
 @Configuration
@@ -45,7 +46,7 @@ public class Swagger2Config {
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("Authorization", "Authorization", "header");
+        return new ApiKey(AUTHORIZATION, AUTHORIZATION, "header");
     }
 
     private SecurityContext securityContext() {
@@ -59,7 +60,7 @@ public class Swagger2Config {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("Authorization", authorizationScopes));
+        return Arrays.asList(new SecurityReference(AUTHORIZATION, authorizationScopes));
     }
 
     @Bean
