@@ -1,4 +1,4 @@
-package com.addressbook.api.tests.user;
+package com.addressbook.api.tests.users;
 
 import com.addressbook.api.model.ErrorDetails;
 import com.addressbook.api.model.TokenDTO;

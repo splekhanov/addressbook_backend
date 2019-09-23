@@ -1,4 +1,4 @@
-package com.addressbook.api.tests.contact;
+package com.addressbook.api.tests.contacts;
 
 import com.addressbook.api.base.BaseTest;
 import com.addressbook.api.model.TokenDTO;
@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
 
-import static com.addressbook.api.tests.user.UserBaseTest.getUserByName;
-import static com.addressbook.api.tests.user.UserBaseTest.registerNewUserAndLogin;
+import static com.addressbook.api.tests.users.UserBaseTest.getUserByName;
+import static com.addressbook.api.tests.users.UserBaseTest.registerNewUserAndLogin;
 
 public class ContactBaseTest extends BaseTest {
 

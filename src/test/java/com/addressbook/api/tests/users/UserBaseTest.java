@@ -1,4 +1,4 @@
-package com.addressbook.api.tests.user;
+package com.addressbook.api.tests.users;
 
 import com.addressbook.api.base.BaseTest;
 import com.addressbook.api.clients.UserClient;

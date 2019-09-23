@@ -1,18 +1,12 @@
-package com.addressbook.api.tests.contact;
+package com.addressbook.api.tests.contacts;
 
 import com.addressbook.api.model.ErrorDetails;
-import com.addressbook.api.model.TokenDTO;
 import com.addressbook.dto.contact.ContactDTO;
-import com.addressbook.dto.security.CredentialsDTO;
 import feign.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
-
-import static com.addressbook.api.tests.user.UserBaseTest.registerNewUserAndLogin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ContactAddTest extends ContactBaseTest {

@@ -1,4 +1,4 @@
-package com.addressbook.api.tests.contact;
+package com.addressbook.api.tests.contacts;
 
 import com.addressbook.api.model.ErrorDetails;
 import com.addressbook.api.model.TokenDTO;
@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 
-import static com.addressbook.api.tests.user.UserBaseTest.registerNewUserAndLogin;
+import static com.addressbook.api.tests.users.UserBaseTest.registerNewUserAndLogin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ContactGetTest extends ContactBaseTest {
